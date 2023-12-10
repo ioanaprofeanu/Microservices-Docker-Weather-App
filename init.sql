@@ -1,12 +1,6 @@
 -- init.sql
 
--- Create schema weather_forecast_schema if it does not exist
 \c weather_forecast_db;
-
--- CREATE SCHEMA IF NOT EXISTS weather_forecast_schema;
-
--- -- Set the search path to the weather_forecast_schema schema
--- SET search_path TO weather_forecast_schema;
 
 -- Create table Tari
 CREATE TABLE IF NOT EXISTS Tari (
@@ -34,6 +28,3 @@ CREATE TABLE IF NOT EXISTS Temperaturi (
     id_oras INTEGER REFERENCES Orase(id) ON DELETE CASCADE,
     UNIQUE (id_oras, timestamp)
 );
-
--- -- Exit from the weather_forecast_schema schema
--- SET search_path TO public;

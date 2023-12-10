@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   weather_forecast_db:
     image: postgres:latest
@@ -13,6 +14,33 @@ services:
     volumes:
       - weather_forecast_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - weather_forecast_api_network
+      - adminer_network
+
+  weather_forecast_api:
+    container_name: weather_forecast_api
+    build: ./api
+    restart: always
+    ports:
+      - 6000:6000
+    depends_on:
+      - weather_forecast_db
+    networks:
+      - weather_forecast_api_network   
+
+  weather_forecast_db_admin:
+    image: adminer
+    container_name: weather_forecast_db_admin
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - adminer_network
+
+networks:
+  weather_forecast_api_network:
+  adminer_network:
 
 volumes:
   weather_forecast_data:
