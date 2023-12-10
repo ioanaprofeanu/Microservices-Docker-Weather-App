@@ -24,6 +24,16 @@ def countries_routes(app, cursor, connection):
 			if ('lon' not in data):
 				return '', 400
 
+			try:
+				float_value = float(data['lat'])
+			except ValueError:
+				return '', 400
+
+			try:
+				float_value = float(data['lon'])
+			except ValueError:
+				return '', 400
+
 			cursor.execute("INSERT INTO Tari (nume_tara, latitudine, longitudine) VALUES (%s, %s, %s) RETURNING id", (data['nume'], data['lat'], data['lon']))
 			connection.commit()
    
@@ -40,15 +50,30 @@ def countries_routes(app, cursor, connection):
 	@app.route("/api/countries/<id>", methods=["PUT"])
 	def patch_country(id):
 		try:
+			if not str(id).isdigit():
+				return '', 400
+
 			data = request.get_json()
+
+			if 'id' not in data:
+				return '', 400
+			if not str(data['id']).isdigit():
+				return '', 400
+
 			if 'nume' not in data:
 				return '', 400
 			if ('lat' not in data):
 				return '', 400
-			if ('lon' not in data):
+			try:
+				float_value = float(data['lat'])
+			except ValueError:
 				return '', 400
 
-			if not str(id).isdigit():
+			if ('lon' not in data):
+				return '', 400
+			try:
+				float_value = float(data['lon'])
+			except ValueError:
 				return '', 400
 
 			# check if the entry with the given id exists
@@ -57,7 +82,7 @@ def countries_routes(app, cursor, connection):
 			if row is None:
 				return '', 404
 
-			cursor.execute("UPDATE Tari SET nume_tara = %s, latitudine = %s, longitudine = %s WHERE id = %s", (data['nume'], data['lat'], data['lon'], id))
+			cursor.execute("UPDATE Tari SET id = %s, nume_tara = %s, latitudine = %s, longitudine = %s WHERE id = %s", (data['id'], data['nume'], data['lat'], data['lon'], id))
 			connection.commit()
 			return '', 200
 
@@ -65,6 +90,9 @@ def countries_routes(app, cursor, connection):
 			connection.rollback()
 			# check if the error contains "duplicate key value violates unique constraint "tari_nume_tara_key"
 			if 'duplicate key value violates unique constraint "tari_nume_tara_key"' in str(e):
+				return '', 409
+			# check if the new id we try to assign already exists
+			if 'duplicate key value violates unique constraint "tari_pkey"' in str(e):
 				return '', 409
 			return '', 404
 

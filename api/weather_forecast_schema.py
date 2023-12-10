@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from datetime import datetime
+from typing import Optional
 
 @dataclass
 class Country:
@@ -14,3 +16,16 @@ class City:
     nume: str
     lat: float
     lon: float
+  
+@dataclass
+class Temperature:
+	id: int
+	valoare: float
+	timestamp: datetime
+
+@dataclass
+class TemperatureFilters:
+    lat: Optional[float] = None
+    lon: Optional[float] = None
+    from_date: Optional[datetime ] = None
+    until_date: Optional[datetime ] = None

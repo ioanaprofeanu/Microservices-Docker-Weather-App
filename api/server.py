@@ -3,6 +3,7 @@ import psycopg2
 from flask import Flask
 from countries_routes import countries_routes
 from cities_routes import cities_routes
+from temperatures_routes import temperatures_routes
 
 def database_connection():
     """ Connect to the PostgreSQL database server """
@@ -31,6 +32,7 @@ def app_create(cursor, connection):
 	app = Flask(__name__)
 	countries_routes(app, cursor, connection)
 	cities_routes(app, cursor, connection)
+	temperatures_routes(app, cursor, connection)
 	# de adaugat si alte rute
 	return app
  
@@ -44,3 +46,4 @@ if __name__ == '__main__':
     
     cursor.close()
     database_close_connection(connection)
+    print('Server stopped.')
