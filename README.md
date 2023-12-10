@@ -2,6 +2,8 @@
 ## Profeanu Ioana, 343C1 - Tema2 SPRC
 
 ### Project Structure:
+
+```
 .
 ├── api
 │   ├── cities_routes.py
@@ -14,6 +16,7 @@
 ├── docker-compose.yml
 ├── init.sql
 └── README.md
+```
 
 - The docker compose is run using the *docker-compose up -d* command in terminal.
 - The docker-compose.yml file contains the following service definitions:
